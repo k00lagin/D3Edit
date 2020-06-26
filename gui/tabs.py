@@ -522,8 +522,8 @@ class AddItemFrame(tk.Frame):
         ent.grid(column=1, row=6, sticky='WE')
         lab = ttk.Label(self, text="Add item from Category:  ")
         lab.grid(column=2, row=6, sticky='E')
-        cb = ttk.Combobox(self, textvariable=self.cat, values=[x[0] for x in list(set(db.get_categories()))],
-                          state='readonly', width=50)
+        cb = ttk.Combobox(self, textvariable=self.cat, values=sorted([x[0] for x in list(set(db.get_categories()))]),
+                          state='readonly', width=50, height=30)
         cb.grid(column=3, row=6, sticky='WE')
         cb.bind("<<ComboboxSelected>>", self.update_item_options)
         lab = ttk.Label(self, text="Number of Affixes:  ")
@@ -532,7 +532,7 @@ class AddItemFrame(tk.Frame):
         ent2.grid(column=1, row=7, sticky='WE')
         lab = ttk.Label(self, text="Specific Item:  ")
         lab.grid(column=2, row=7, sticky='E')
-        self.itemcb = ttk.Combobox(self, textvariable=self.chosenitem, values=[], state='readonly', width=50)
+        self.itemcb = ttk.Combobox(self, textvariable=self.chosenitem, values=[], state='readonly', width=50, height=30)
         self.itemcb.grid(column=3, row=7, sticky='WE')
         self.itemcb.bind("<<ComboboxSelected>>", self.update_item_id)
         lab = ttk.Label(self, text="Quality:  ")
@@ -549,7 +549,7 @@ class AddItemFrame(tk.Frame):
         self.LabelMessage.grid(column=0, row=101, columnspan=6, sticky='W')
 
     def update_item_options(self, event=None):
-        items = db.get_items_from_category(self.cat.get())
+        items = sorted(db.get_items_from_category(self.cat.get()), key=lambda item: item[0])        
         itemcbvalues = [x[0] for x in items]
         self.itemcbgbids = [x[1] for x in items]
         self.itemcb.config(values=itemcbvalues)
